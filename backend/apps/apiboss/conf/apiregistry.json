@@ -1,5 +1,5 @@
 {
-    "/apps/apiboss/admin/publish": "/apis/publish.js?needsToken=admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
+    "/apps/apiboss/admin/publish": "/apis/publish.js?keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/admin/edit": "/apis/edit.js?needsToken=admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/admin/list": "/apis/list.js?needsToken=admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/admin/delete": "/apis/delete.js?needsToken=admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
@@ -8,12 +8,18 @@
     "/apps/apiboss/admin/addAdmin": "/apis/login.js?needsToken=admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/admin/blacklistip": "/apis/blacklistip.js?needsToken=admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/admin/whitelistip": "/apis/whitelistip.js?needsToken=admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
-    
+    "/apps/apiboss/admin/updateconf": "/apis/updateconf.js?needsToken=false&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/echo": "/apis/echo.js?needsToken=false",
     "/apps/apiboss/genjwttoken": "/apis/genjwttoken.js?needsToken=false&addsToken=sub:access,tokenflag:{{{data.result}}}&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/echoSecure": "/apis/echo.js?needsToken=access,admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
     "/apps/apiboss/echoSecureProxied": "/apis/restproxy.js?get=true&needsToken=access,admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf&url=http%3A%2F%2Flocalhost%3A9090%2Fapps%2Fapiboss%2FechoSecure&method=POST&headers=%7B%22x-api-key%22%3A%22jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf%22%2C%22x-apiboss-passthru-headers%22%3A%5B%22authorization%22%2C%22accept%22%5D%7D",
     "/apps/apiboss/echoSecureProxiedEncrypted": "/apis/restproxy.js?encrypted=true&cryptkey=21887als2141rwq294938jwkj3029rqsnj&get=true&needsToken=access,admin&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf&url=http%3A%2F%2Flocalhost%3A9090%2Fapps%2Fapiboss%2FechoSecure&method=POST&headers=%7B%22x-api-key%22%3A%22jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf%22%2C%22x-apiboss-passthru-headers%22%3A%5B%22authorization%22%2C%22accept%22%5D%7D",
     "/apps/apiboss/wsecho": "/apis/wsecho.js?notRESTAPI=true&customContentType=text/xml&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf",
-    "/apps/apiboss/wsechoSecureProxied": "/apis/httpproxy.js?notRESTAPI=true&needsBasicAuth=true&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf&url=http%3A%2F%2Flocalhost%3A9090%2Fapps%2Fapiboss%2Fwsecho&method=POST&headers=%7B%22x-api-key%22%3A%22jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf%22%2C%22x-apiboss-passthru-headers%22%3A%5B%22authorization%22%2C%22accept%22%2C%22content-type%22%5D%7D"
+    "/apps/apiboss/wsechoSecureProxied": "/apis/httpproxy.js?notRESTAPI=true&needsBasicAuth=true&keys=jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf&url=http%3A%2F%2Flocalhost%3A9090%2Fapps%2Fapiboss%2Fwsecho&method=POST&headers=%7B%22x-api-key%22%3A%22jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf%22%2C%22x-apiboss-passthru-headers%22%3A%5B%22authorization%22%2C%22accept%22%2C%22content-type%22%5D%7D",
+    "/deeplogictech.com/helloworld": "/apis/restproxy.js?keys=fff3bc0e-9a94-4015-9f71-8e87c6c45104&url=https%3A%2F%2Fpostman-echo.com%2Fpost&method=POST",
+    "/deeplogictech.com/dasdsad": "/apis/restproxy.js?keys=762b2225-d3a0-406b-93a5-8dc94cdbc417&get=true&url=http%3A%2F%2Flocalhost%3A9090&method=GET",
+    "/deeplogictech.com/gemini": "/apis/restproxy.js?keys=fff3bc0e-9a94-4015-9f71-8e87c6c45104&url=https%3A%2F%2Fgenerativelanguage.googleapis.com%2Fv1beta%2Fmodels%2Fgemini-2.5-flash-lite%3AgenerateContent%3Fkey%3DAIzaSyD-Nn8uJEspmiuD0wbb1UAu_dyVKK0urXs&method=POST&headers=%7B%22X-goog-api-key%22%3A%22AIzaSyD-Nn8uJEspmiuD0wbb1UAu_dyVKK0urXs%22%7D",
+    "/deeplogictech.com/gemini1": "/apis/restproxy.js?keys=fff3bc0e-9a94-4015-9f71-8e87c6c45104&url=https%3A%2F%2Fgenerativelanguage.googleapis.com%2Fv1beta%2Fmodels%2Fgemini-2.5-flash-lite%3AgenerateContent&method=POST&headers=%7B%22X-goog-api-key%22%3A%22AIzaSyD-Nn8uJEspmiuD0wbb1UAu_dyVKK0urXs%22%7D",
+    "/deeplogictech.com/llmcall": "/apis/restproxy.js?keys=fff3bc0e-9a94-4015-9f71-8e87c6c45104&url=https%3A%2F%2Fgenerativelanguage.googleapis.com%2Fv1beta%2Fmodels%2Fgemini-2.5-flash-lite%3AgenerateContent&method=POST&headers=%7B%22X-goog-api-key%22%3A%22AIzaSyD-Nn8uJEspmiuD0wbb1UAu_dyVKK0urXs%22%7D",
+    "/deeplogictech.com/llmcall1": "/apis/restproxy.js?keys=fff3bc0e-9a94-4015-9f71-8e87c6c45104&url=https%3A%2F%2Fgenerativelanguage.googleapis.com%2Fv1beta%2Fmodels%2Fgemini-2.5-flash-lite%3AgenerateContent&method=POST&headers=%7B%22X-goog-api-key%22%3A%22AIzaSyD-Nn8uJEspmiuD0wbb1UAu_dyVKK0urXs%22%2C%22aiwall%22%3A%22true%22%7D"
 }

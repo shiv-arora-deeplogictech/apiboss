@@ -1,2 +1,3 @@
 #SQLite DB not to be checked in
 *.db
+/backend/apps/apiboss/conf/llm.json
