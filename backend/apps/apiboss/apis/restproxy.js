@@ -53,8 +53,8 @@ Instructions:
 Response format (strict): {"allowed": true} or {"allowed": false}`;
 
             // The user query is extracted from the request body (Currently set according to Gemini chat format)
-            const userQuery = req?.data?.contents[0].parts[0].text || '';
-            
+            const messages = req?.data?.messages || [];
+            const userQuery = messages[messages.length - 1]?.content || "";
 
             const endpointCalled = req?.servObject?.req?.url || '';
             const renderedPrompt = Mustache.render(validationPrompt, { aiwallRules: aiwallRules[endpointCalled].rule, userQuery: userQuery });

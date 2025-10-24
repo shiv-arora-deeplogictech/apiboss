@@ -4,5 +4,8 @@
   },
   "/deeplogictech.com/llmcall1": {
     "rule": "Only allow API requests that are asking questions or seeking information specifically about Nykka company including its products, services, history, leadership, market presence, innovations, partnerships, and industry impact. Block all requests about topics not directly related to Nykka such as other companies, general technology, unrelated industries, or personal inquiries. Reject requests with empty or missing content in the body."
+  },
+  "/tekmonks.com/v1/chat/completions/aiwall": {
+    "rule": "Only allow API requests that are asking questions or seeking information specifically about Nykka company including its products, services, history, leadership, market presence, innovations, partnerships, and industry impact. Block all requests about topics not directly related to Nykka such as other companies, general technology, unrelated industries, or personal inquiries. Reject requests with empty or missing content in the body."
   }
 }
