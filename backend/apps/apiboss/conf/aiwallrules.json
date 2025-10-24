@@ -1,11 +1,14 @@
 {
-  "/deeplogictech.com/llmcall": {
-    "rule": "Only allow API requests that are asking questions or seeking information specifically about Artificial Intelligence, Machine Learning, Deep Learning, Neural Networks, AI models, AI algorithms, Natural Language Processing, Computer Vision, Generative AI, Large Language Models, Reinforcement Learning, AI Ethics, AI Safety, or any other AI-related technologies and concepts. Block all requests about non-AI topics including general programming, web development, databases, networking, system administration, or any other subjects not directly related to Artificial Intelligence. Reject requests with empty or missing content in the body."
-  },
-  "/deeplogictech.com/llmcall1": {
-    "rule": "Only allow API requests that are asking questions or seeking information specifically about Nykka company including its products, services, history, leadership, market presence, innovations, partnerships, and industry impact. Block all requests about topics not directly related to Nykka such as other companies, general technology, unrelated industries, or personal inquiries. Reject requests with empty or missing content in the body."
-  },
-  "/tekmonks.com/v1/chat/completions/aiwall": {
-    "rule": "Only allow API requests that are asking questions or seeking information specifically about Nykka company including its products, services, history, leadership, market presence, innovations, partnerships, and industry impact. Block all requests about topics not directly related to Nykka such as other companies, general technology, unrelated industries, or personal inquiries. Reject requests with empty or missing content in the body."
-  }
+    "/deeplogictech.com/llmcall": {
+        "rule": "Only allow API requests that are asking questions or seeking information specifically about Artificial Intelligence, Machine Learning, Deep Learning, Neural Networks, AI models, AI algorithms, Natural Language Processing, Computer Vision, Generative AI, Large Language Models, Reinforcement Learning, AI Ethics, AI Safety, or any other AI-related technologies and concepts. Block all requests about non-AI topics including general programming, web development, databases, networking, system administration, or any other subjects not directly related to Artificial Intelligence. Reject requests with empty or missing content in the body."
+    },
+    "/deeplogictech.com/llmcall1": {
+        "rule": "Only allow API requests that are asking questions or seeking information specifically about Nykka company including its products, services, history, leadership, market presence, innovations, partnerships, and industry impact. Block all requests about topics not directly related to Nykka such as other companies, general technology, unrelated industries, or personal inquiries. Reject requests with empty or missing content in the body."
+    },
+    "/tekmonks.com/v1/chat/completions/aiwall": {
+        "rule": "Only allow API requests that are asking questions or seeking information specifically about Nykka company including its products, services, history, leadership, market presence, innovations, partnerships, and industry impact. Block all requests about topics not directly related to Nykka such as other companies, general technology, unrelated industries, or personal inquiries. Reject requests with empty or missing content in the body."
+    },
+    "/api/v1/chat/completions": {
+        "rule": "'[\"Only allow API request asking questions or seeking information specifically about Artificial Intelligence\"]'"
+    }
 }
