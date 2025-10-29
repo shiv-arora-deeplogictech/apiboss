@@ -7,6 +7,7 @@
 
 const fetch = require('node-fetch');
 const llmConf = require(`${APPCONSTANTS.CONF_DIR}/llm.json`);
+const httpClient = require(CONSTANTS.LIBDIR + "/httpClient.js");
 
 async function doCall(prompt) {
     try {
@@ -46,7 +47,8 @@ async function doCall(prompt) {
         };
 
         // Make the fetch request
-        const response = await fetch(url, fetchOptions);
+        // const response = await fetch(url, fetchOptions);
+        const response = await httpClient.fetch(url, fetchOptions);
 
         // Parse response
         const data = await response.json();
@@ -62,6 +64,8 @@ async function doCall(prompt) {
         }
 
         const llmResponse = data.choices[0].message;
+
+        llmResponse.content = cleanResponseContent(llmResponse.content);
 
         // Validate message content
         if (!llmResponse.content) {
@@ -82,5 +86,23 @@ async function doCall(prompt) {
         // Re-throw with more context
         throw new Error(`LLM API call failed: ${error.message}`);
     }
+}
+
+function cleanResponseContent(content) {
+    if (!content || typeof content !== 'string') {
+        return content;
+    }
+
+    let cleanContent = content.trim();
+    
+    // Remove markdown code blocks if present
+    if (cleanContent.startsWith('```')) {
+        cleanContent = cleanContent
+            .replace(/```json\n?/g, '')
+            .replace(/```\n?/g, '')
+            .trim();
+    }
+    
+    return cleanContent;
 }
 module.exports = {doCall};

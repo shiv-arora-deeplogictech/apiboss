@@ -153,8 +153,9 @@ async function _writeApiRegistry(req) {
                 ? `/plugins/aiwall.js?${value.slice(2)}`
                 : `/apis/restproxy.js?${value.slice(2)}`;
 
+        const rateLimitConfig = req[0]?.rateLimit?.[key] || {};
         await publish.doService({
-            data: { path: `${key}`, backendurl: item.backendurl, method: item.backendurlmethod, apiregentry: target }
+            data: { path: `${key}`, backendurl: item.backendurl, method: item.backendurlmethod, apiregentry: target, rateLimit: rateLimitConfig }
         });
     }
 }

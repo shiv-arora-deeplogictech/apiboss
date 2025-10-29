@@ -1,3 +1,5 @@
+const { json } = require("stream/consumers");
+
 /**
  * (C) 2020 TekMonks. All rights reserved.
  *
@@ -16,7 +18,12 @@ exports.doService = async req => {
         return { data: CONSTANTS.FALSE_RESULT };
     }
 
-    const generatedKey = generateRandomKey();
+    let x_api_key_user = req.data?.x_api_key;
+    if(!req.data.x_api_key || req.data.x_api_key === "") {
+    x_api_key_user = generateRandomKey();
+    jsonReq.apikey = [x_api_key_user];
+    }
+    jsonReq.apikey = [x_api_key_user];
 
     // Generate dynamic registry entry if not provided
     if (!jsonReq.apiregentry) {
@@ -29,7 +36,7 @@ exports.doService = async req => {
         const encodedHeaders = encodeURIComponent(JSON.stringify(mergedHeaders));
         const method = jsonReq.method || "POST";
 
-        jsonReq.apiregentry = `/plugins/aiwall.js?keys=${generatedKey}&url=${encodedURL}&method=${method}&headers=${encodedHeaders}`;
+        jsonReq.apiregentry = `/plugins/aiwall.js?keys=${x_api_key_user}&url=${encodedURL}&method=${method}&headers=${encodedHeaders}`;
     }
 
     // Only save rules (no api key or aiwall flags)
@@ -50,25 +57,27 @@ exports.doService = async req => {
     return {
         data: {
             result: CONSTANTS.TRUE_RESULT,
-            "x-api-key": generatedKey,
+            "x-api-key": x_api_key_user,
             "api-url": apiURL
         }
     };
 };
 
 function _formatRegEntry(jsonReq) {
-    // builds minimal structure for updateconf
+    // Allow user to set custom rate limits, fallback to default values
+    const rateLimit = jsonReq.rateLimit || {
+        persec: 10,
+        permin: 100,
+        perhour: 1000,
+        perday: 5000,
+        permonth: 10000,
+        peryear: 50000
+    };
+
     return [
         {
             rateLimit: {
-                [jsonReq.path]: {
-                    persec: 10,
-                    permin: 100,
-                    perhour: 1000,
-                    perday: 5000,
-                    permonth: 10000,
-                    peryear: 50000
-                }
+                [jsonReq.apikey]: rateLimit
             }
         },
         {
@@ -98,6 +107,7 @@ function _formatRegEntry(jsonReq) {
         }
     ];
 }
+
 
 const validateRequest = jsonReq => {
     return !!(jsonReq && jsonReq.path && (jsonReq.apiregentry || jsonReq.backendurl));

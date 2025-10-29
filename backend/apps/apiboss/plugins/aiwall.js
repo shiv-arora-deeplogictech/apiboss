@@ -10,6 +10,7 @@ const { doCall } = require(`${APPCONSTANTS.LIB_DIR}/llmcall.js`);
 
 const apibosslog = require(`${APPCONSTANTS.LIB_DIR}/apibosslog.js`);
 const aiwallRules = require(`${APPCONSTANTS.CONF_DIR}/aiwallrules.json`);
+const fs = require("fs").promises;
 
 exports.doService = doService;
 
@@ -29,29 +30,14 @@ async function doService(req) {
         }
 
         // Deterministic policy checks (examples)
-        if (!["POST"].includes(method.toUpperCase())) {
+        if (!["POST","GET"].includes(method.toUpperCase())) {
             throw { status: 405, message: "Method Not Allowed" };
         }
         try {
 
             // Construct validation prompt
-            const validationPrompt = `Analyze the following API request and determine if it should be allowed. Return ONLY a valid JSON object with a single boolean field "allowed" (true or false). Do not include any explanations, markdown formatting, or additional text.
-
-User Query:
-{{{userQuery}}}
-
-API Security Rules:
-{{{aiwallRules}}}
-
-Instructions:
-1. Check if the request violates any of the security rules above.
-2. Consider the request method, path, headers, and body content.
-3. Return <out>true</out> **only if the request fully complies with all rules.**
-4. Return <out>false</out> if the request violates any security rule in any way.
-5. Do not include any extra text or formatting outside of the JSON object.
-
-Response format (strict): {"allowed": true} or {"allowed": false}`;
-
+            const validationPrompt = await fs.readFile(`${APPCONSTANTS.PLUGINDIR}/prompts/aiwall_validation_prompt.txt`, "utf8");
+            
             // The user query is extracted from the request body (Currently set according to Gemini chat format)
             const messages = req?.data?.messages || [];
             const userQuery = messages[messages.length - 1]?.content || "";
@@ -61,17 +47,11 @@ Response format (strict): {"allowed": true} or {"allowed": false}`;
 
             // Make LLM call
             const llmResponse = await doCall(renderedPrompt);
-
+            const validationContent = llmResponse.content;
             // Parse and validate LLM response
             let validationResult;
             try {
-                // Clean response content (remove markdown code blocks if present)
-                let cleanContent = llmResponse.content.trim();
-                if (cleanContent.startsWith('```')) {
-                    cleanContent = cleanContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-                }
-
-                validationResult = JSON.parse(cleanContent);
+                validationResult = JSON.parse(validationContent);
 
                 if (typeof validationResult.allowed !== 'boolean') {
                     throw new Error('Invalid validation result: "allowed" field must be a boolean');

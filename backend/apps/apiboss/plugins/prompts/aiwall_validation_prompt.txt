@@ -1,0 +1,16 @@
+Analyze the following API request and determine if it should be allowed. Return ONLY a valid JSON object with a single boolean field "allowed" (true or false). Do not include any explanations, markdown formatting, or additional text.
+
+User Query:
+{{{userQuery}}}
+
+API Security Rules:
+{{{aiwallRules}}}
+
+Instructions:
+1. Check if the request violates any of the security rules above.
+2. Consider the request method, path, headers, and body content.
+3. Return <out>true</out> **only if the request fully complies with all rules.**
+4. Return <out>false</out> if the request violates any security rule in any way.
+5. Do not include any extra text or formatting outside of the JSON object.
+
+Response format (strict): {"allowed": true} or {"allowed": false}
