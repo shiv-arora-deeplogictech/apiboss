@@ -37,10 +37,14 @@ async function doService(req) {
 
             // Construct validation prompt
             const validationPrompt = await fs.readFile(`${APPCONSTANTS.PLUGINDIR}/prompts/aiwall_validation_prompt.txt`, "utf8");
-            
+            const extractionPrompt = await fs.readFile(`${APPCONSTANTS.PLUGINDIR}/prompts/aiwall_userquery_extraction_prompt.txt`, "utf8");
+            const reqObj = req.data || {};
+            const extractedRenderedPrompt = Mustache.render(extractionPrompt, { requestBody: JSON.stringify(reqObj) });
+            const llmExtractionResponse = await doCall(extractedRenderedPrompt);
+            const userQuery = llmExtractionResponse.content || "";
             // The user query is extracted from the request body (Currently set according to Gemini chat format)
-            const messages = req?.data?.messages || [];
-            const userQuery = messages[messages.length - 1]?.content || "";
+            // const messages = req?.data?.messages || [];
+            // const userQuery = messages[messages.length - 1]?.content || "";
 
             const endpointCalled = req?.servObject?.req?.url || '';
             const renderedPrompt = Mustache.render(validationPrompt, { aiwallRules: aiwallRules[endpointCalled].rule, userQuery: userQuery });

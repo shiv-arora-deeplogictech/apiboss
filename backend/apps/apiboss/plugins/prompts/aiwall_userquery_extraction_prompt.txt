@@ -1,0 +1,13 @@
+You are a query extraction assistant. Extract the user's actual query/request from the following API request body.
+
+API Request Body:
+{{{requestBody}}}
+
+Instructions:
+1. Identify what the user is trying to ask, request, or accomplish
+2. Extract the core query, prompt, or input text
+3. If multiple messages/contents exist, extract the LAST user message
+4. Return ONLY the extracted query text, nothing else
+5. If you cannot find a query, return "NO_QUERY_FOUND"
+
+Extracted Query:
