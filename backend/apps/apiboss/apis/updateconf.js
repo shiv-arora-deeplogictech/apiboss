@@ -15,7 +15,16 @@ exports.doService = async jsonReq => {
     if (!validateRequest(jsonReq)) {
         LOG.error(`Bad API list request ${jsonReq ? JSON.stringify(jsonReq) : "null"}.`);
         return { data: CONSTANTS.FALSE_RESULT };
-    } else {
+    } 
+    
+    if (jsonReq.data?.data?.operation === "delete") {
+        const deleteModule = require(`${__dirname}/delete.js`);
+        const deletePath = jsonReq.data.data.path;
+        LOG.info(`Delete operation triggered for ${deletePath}`);
+        return await deleteModule.doService({ data: { path: deletePath } });
+    }
+
+    else {
         _generateRateLimit(jsonReq);
         _generateHttpBasicAuth(jsonReq);
         _generateInputOutput(jsonReq);
