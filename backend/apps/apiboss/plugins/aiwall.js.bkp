@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const Mustache = require('mustache');
 const rest = require(`${CONSTANTS.LIBDIR}/rest.js`);
 const { doCall } = require(`${APPCONSTANTS.LIB_DIR}/llmcall.js`);
+
 const apibosslog = require(`${APPCONSTANTS.LIB_DIR}/apibosslog.js`);
 const aiwallRules = require(`${APPCONSTANTS.CONF_DIR}/aiwallrules.json`);
 const fs = require("fs").promises;
@@ -18,8 +19,7 @@ async function doService(req) {
 
     let method = req.method.toLowerCase(); const url = new URL(req.url); const host = url.hostname;
     const port = url.port; const path = url.pathname + url.search; if (!path.startsWith("/")) path = `/${path}`;
-    const headers = { ...req.headers }; const reqObj = req.data; let userQuery = ""; let systemPrompt = "";
-
+    const headers = { ...req.headers }; const reqObj = req.data;
 
     if (headers?.aiwall && headers?.aiwall === "true") {
         const route = req?.servObject?.req?.url || path;
@@ -34,16 +34,18 @@ async function doService(req) {
             throw { status: 405, message: "Method Not Allowed" };
         }
         try {
+
             // Construct validation prompt
             const validationPrompt = await fs.readFile(`${APPCONSTANTS.PLUGINDIR}/prompts/aiwall_validation_prompt.txt`, "utf8");
             const extractionPrompt = await fs.readFile(`${APPCONSTANTS.PLUGINDIR}/prompts/aiwall_userquery_extraction_prompt.txt`, "utf8");
             const reqObj = req.data || {};
             const extractedRenderedPrompt = Mustache.render(extractionPrompt, { requestBody: JSON.stringify(reqObj) });
             const llmExtractionResponse = await doCall(extractedRenderedPrompt);
+            //const userQuery = llmExtractionResponse.content || "";
             // The user query is extracted from the request body (Currently set according to Gemini chat format)
             let messages = req?.data?.messages || [];
-            systemPrompt= messages[messages.length - 2]?.content || "";
-            userQuery = messages[messages.length - 1]?.content || "";
+            const systemPrompt= messages[messages.length - 2]?.content || "";
+            const userQuery = messages[messages.length - 1]?.content || "";
 
             const endpointCalled = req?.servObject?.req?.url || '';
             const renderedPrompt = Mustache.render(validationPrompt, { aiwallRules: aiwallRules[endpointCalled].rule, userQuery: userQuery });
@@ -96,56 +98,12 @@ async function doService(req) {
     }
     const { error, data, status, resHeaders } = await rest[method](host, port, path, headers, reqObj);
     apibosslog.recordResponse(id, Date.now(), error, data, status, resHeaders, "rest"); // log response, async, don't wait
-    if (headers?.summary==="false") {
-        return ({ data, headers: resHeaders });
-    }
-        // NEW: Response-side AI Wall check
-    if (headers?.aiwall && headers?.aiwall === "true" && !error && data) {
-        const route = req?.servObject?.req?.url || path;
-        const ruleEntry = aiwallRules[route];
-        
-        if (ruleEntry && ruleEntry.rule) {
-            try {
-                const responseValidationPrompt = await fs.readFile(`${APPCONSTANTS.PLUGINDIR}/prompts/aiwall_response_validation_prompt.txt`, "utf8");
-                
-                // Include user query in response validation for context
-                const renderedPrompt = Mustache.render(responseValidationPrompt, { 
-                    aiwallRules: ruleEntry.rule,
-                    userQuery: userQuery || "Not available", // Include the original user query
-                    responseData: JSON.stringify(data)
-                });
-
-                const llmResponse = await doCall(renderedPrompt);
-                const validationContent = llmResponse.content;
-
-                let validationResult;
-                try {
-                    validationResult = JSON.parse(validationContent);
-                    if (typeof validationResult.allowed !== 'boolean') {
-                        throw new Error('Invalid validation result: "allowed" field must be a boolean');
-                    }
-                } catch (parseError) {
-                    LOG.error(`Failed to parse LLM response validation: ${parseError.message}`);
-                    throw new Error('AI Wall response validation failed: invalid response format');
-                }
-
-                if (!validationResult.allowed) {
-                    LOG.error(`AI Wall blocked response for: ${method.toUpperCase()} ${host}${path}`);
-                    throw { status: 403, message: "Forbidden: Response blocked by AI Wall" };
-                }
-
-                LOG.info(`AI Wall allowed response: ${method.toUpperCase()} ${host}${path}`);
-            } catch (error) {
-                if (error.status) throw error;
-                LOG.error(`AI Wall response validation error: ${error.message || error}`);
-                throw { status: 403, message: "Forbidden: AI Wall response validation failed" };
-            }
-        }
-    }
 
     if (error) throw ("APIBoss REST Proxy Error", { status, message: error });
     else return ({ data, headers: resHeaders });
 }
+
+
 
 function extractBetweenTags(text, tag="out") {
   const startTag = `<${tag}>`, endTag = `</${tag}>`;

@@ -9,7 +9,7 @@ const fetch = require('node-fetch');
 const llmConf = require(`${APPCONSTANTS.CONF_DIR}/llm.json`);
 const httpClient = require(CONSTANTS.LIBDIR + "/httpClient.js");
 
-async function doCall(prompt) {
+async function doCall(prompt, incomingSystemPrompt = "" ) {
     try {
         // Validate prompt
         if (!prompt || typeof prompt !== 'string') {
@@ -27,7 +27,7 @@ async function doCall(prompt) {
         const reqObj = {
             model,
             messages: [
-                { role: "system", content: systemPrompt || "You are a helpful assistant." },
+                { role: "system", content: incomingSystemPrompt || systemPrompt || "You are a helpful assistant." },
                 { role: "user", content: prompt }
             ],
             ...(additionalParams || {})
